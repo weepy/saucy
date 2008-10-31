@@ -1,0 +1,15 @@
+Snips
+=====
+
+Super Simple Content Management
+
+
+Install
+=======
+
+1) Add `map.snips` to routes
+2) Copy `assets` to public folder
+3) Add the following (or similar) to your layouts
+
+  <%= stylesheet_link_tag 'snips' %>
+  <%= javascript_include_tag 'jquery', 'form' ,'snips' %>
