@@ -1,15 +1,12 @@
-Snips
+Saucy
 =====
 
-Super Simple Content Management
+Dynamic Text Rendering Plugin.
 
+It uses jQuery to replace innerHTML of elements with an image.
 
-Install
-=======
+The filename of the image contains all necessary information to allow Imagemagick to render the text.
 
-1) Add `map.snips` to routes
-2) Copy `assets` to public folder
-3) Add the following (or similar) to your layouts
+* Automatic cacheing
+* SEO friendly
 
-  <%= stylesheet_link_tag 'snips' %>
-  <%= javascript_include_tag 'jquery', 'form' ,'snips' %>
