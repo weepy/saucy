@@ -1,12 +1,90 @@
 Saucy
 =====
 
-Dynamic Text Rendering Plugin.
-
-It uses jQuery to replace innerHTML of elements with an image.
-
-The filename of the image contains all necessary information to allow Imagemagick to render the text.
+Dynamic Text Rendering Plugin for Rails. Like sIFR but without the hassle/flash/javascript.
 
 * Automatic cacheing
 * SEO friendly
+* render any TTF font
+* Shadows, outlines, rotation.
 
+Use
+---
+
+In a view:
+
+<%= saucy_tag tag, text, style, options  %>
+
+* tag: the type of tag to output, eg. "h1"
+* text: your own text. Note it can contain newlines which will be interpreted as multiline text.
+* style: a style hash
+* options: html attributes to be inserted
+
+Styles
+------
+
+The style has has several options and the default style is: 
+
+    DEFAULT_STYLE = { 
+      :background => "transparent",
+      :font => {:size=>18, :color => "#000", :font => "arial", :stretch => "normal"},
+      :stroke => {:width => 0, :color => "#000", :inner => true },
+      :shadow => {:color => "#000", :opacity => 0.6, :top => 2, :left => 2, :blur => 5.0, :render => false },
+      :rotate => 0,
+      :spacing => {:letter => 0, :word => 0}
+    }
+
+The style that's passed in will be merged over the top of this. 
+
+Internet Explorer
+-----
+
+If the background is transparent, Saucy will automatically output a tag with CSS that IE will interpret and use it's AlphaFilter properly.
+
+* Bonus: you can output any pngs as transparent with the following helper, no javascript needed! :
+
+<%= transparent_png(filename) %>
+
+
+Fonts
+-----
+
+Fonts are loaded from the /plugins/saucy/fonts directory.
+
+
+Try out
+-------
+
+* In your controller
+
+<pre>
+def saucy
+    @stroked = { :stroke => { :color => "red", :width => 1 }, :font => { :size => 100, :color => "#fff" }, :spacing => {:letter => 100 }  }
+    @thick_stroked = { :stroke => { :color => "red", :width => 20, :inner => 1 }, :font => { :size => 100, :color => "#fff" }  }
+    @bauhaus = { :font => { :size => 100, :font => "bauhausl.ttf"  }  }
+    @shadow = { :background => "transparent", :font => { :size => 100, :font => "basket.ttf", :color => "#fff" }, :shadow => { :render => true, :top => 5, :left => 5 }  }
+    @rotate = { :rotate => -15, :font => { :size => 100, :font => "bauhausl.ttf", :color => "red", :stretch => "condensed" } }
+end
+</pre>
+
+* In saucy.html.erb
+
+<pre>
+  <style>
+    body {background: url(http://www.parkerfox.co.uk/images/bg.png) }
+  </style>
+  <%= saucy_tag "p", "default - no style", {} %>
+  <%= saucy_tag "p", "mutli\nline\nbauhaus", @bauhaus  %>
+  <%= saucy_tag "p", "stroked!!", @stroked, {:class=>"myclass"} %>
+  <%= saucy_tag "p", "stroked!!", @thick_stroked, {:class=>"myclass"} %>
+  <p>Lorem ispsum</p>
+
+  <%= saucy_tag "h2", "h2 tag", @bauhaus, {:id=>"myid"} %>
+  <p>Lorem ispsum</p>
+  <%= saucy_tag "p", "lets rotate!", @rotate %>
+  <%= saucy_tag "p", "shadow", @shadow %>
+
+  <a href='/'>
+    <%= saucy_tag "p", "rotate the lettters", {:font => { :rotate => -90, :size => 40}, :rotate => 90 } %>
+  </a>
+</pre>
