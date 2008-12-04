@@ -161,13 +161,12 @@ Try out
   end
   
 * In saucy.html.erb
-
   <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
   <html>
     <head>
       <title>Saucy</title>
-      <%= javascript_include_tag :defaults %>
+   
       <style type="text/css">
         .saucySprite:hover {
           background-position: 0 0 !important;
@@ -193,7 +192,7 @@ Try out
 
       <%= saucy_tag("thick stroked sprite!!", 
                       :style => @thick_stroked, 
-                      :hover => {:font => {:color => 'blue'}},
+                      :hover => {:stroke => {:color => "#5fe"}},
                       :html => {:class => ["myclass2"]}
                     ) %>
     </body>
