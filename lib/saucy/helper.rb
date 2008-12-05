@@ -35,7 +35,8 @@ module Saucy
       style['display'] = "block"
       
       ie_style = ""
-      if options[:transparent] != false # transparent by default
+      transparent = options[:style][:background] &&  options[:style][:background] != "transparent" #transparent by default
+      if transparent
         ie_style += '_background: transparent;'
         ie_style += "_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='#{src}', sizingMethod='crop');"
       end
