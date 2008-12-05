@@ -14,7 +14,7 @@ Examples
   <%= saucy_tag("I am red", :style => {:font => {:color => 'red' }}) %>
   <%= saucy_tag("I am a red/blue sprite", 
                   :style => {:font => {:color => 'red'}}, 
-                  :hover => {:font => {:color => 'blue'}}
+                  :highlight => {:font => {:color => 'blue'}}
                 ) %>
   
 Use
@@ -34,9 +34,9 @@ Available options
 # Style needs to be a hash - see the 'Styles' heading below
 {:style => {}}
 
-# Hover option is for sprites, the styles passed in override
-# the styles that were passed in for :style.
-{:hover => {}}
+# Highlight option is for sprites, the styles passed in override
+# the styles that were passed in for :style. This can be used for hover or focus effects
+{:highlight => {}}
 
 # The html style needs to be a hash
 # The html class needs to be a array of classNames
@@ -46,8 +46,8 @@ Available options
 {:tag => :p}
 
 # Transparent needs to be a boolean - 
-# this defaults to false 
-{:transparent => true}
+# this defaults to true 
+{:transparent => false}
 
 Styles
 ------
@@ -87,9 +87,7 @@ The style that's passed in will be merged over the top of this.
 Internet Explorer
 -----
 
-Saucy will apply an AlphaFilter if you pass in the transparent option as true.
-
- :transparent => true
+Saucy will apply an AlphaFilter if you the background color is "transparent" (or absent since this is the default)
 
 Fonts
 -----
@@ -99,19 +97,17 @@ Fonts are loaded from the /plugins/saucy/fonts directory.
 Sprites
 -------
 
-If you're using sprites you need to have the following styles:
+If you set an highlight style Saucy will render a sprite consisting of 2 images, the normal and the highlight.
+To set a sprite to be at the highlight style, simply set the top margin to 0. E.g. the following is for a hover effect:
 
   <style type="text/css" media="screen">
     .saucySprite:hover {
-      background-position: 0 0 !important;
+      margin-top: 0 !important;
     }
   </style>
 
-If you're using tags other than the 'a' tag you'll need to apply this hover pseudo-class with JavaScript,
-as IE 6 only support the hover pseudo-class for 'a' tags.
-
-You need to pass in a :hover option which is in the same format as the :style option.
-The :hover option overrides the :style option (you don't need to pass in all the styles again).
+You need to pass in a :highlight option which is in the same format as the :style option.
+The :highlight option overrides the :style option (you don't need to pass in all the styles again).
 
 Try out
 -------
@@ -119,21 +115,95 @@ Try out
 * In your controller
 
   def saucy
-    @stroked = { 
-      :rotate => -10, 
-      :stroke => { 
-        :color => "red", 
-        :width => 1 
-      }, 
+    @spacing = { 
       :font => { 
-        :size => 100, 
-        :color => "#fff" 
-      }, 
+        :size => 70, 
+        :color => "#cfc" 
+      },
       :spacing => {
-        :letter => 100 
+        :letter => -6 
       }  
     }
-  
+
+    @thick_stroked = { 
+      :stroke => { 
+        :color => "red",
+        :width => 5 
+        }, 
+      :font => { 
+        :size => 50, 
+        :color => "#fff" 
+        }  
+      }
+
+    @bauhaus = { 
+      :font => { 
+        :size => 50, 
+        :font => "bauhausl.ttf", 
+        :color => "white"  
+        }  
+      }
+    
+    @outline = { 
+      :font => { 
+        :size => 60, 
+        :font => "basket.ttf", 
+        :color => "transparent" 
+        },
+      :stroke => {
+        :width => 2
+      },
+      :shadow => { 
+        :render => true, 
+        :top => 5, 
+        :left => 5, 
+        :opacity => 0.2 
+        }  
+      }
+      
+
+    @shadow = { 
+      :font => { 
+        :size => 60, 
+        :font => "basket.ttf", 
+        :color => "#fff" 
+        }, 
+      :shadow => { 
+        :render => true, 
+        :top => 5, 
+        :left => 5, 
+        :opacity => 0.2 
+        }  
+      }
+    @rotate = { 
+      :rotate => -15, 
+      :font => { 
+        :size => 70, 
+        :font => "bauhausl.ttf", 
+        :color => "#fec", 
+        :stretch => "condensed" 
+        }
+      }
+
+    @saucy = { 
+      :font => { 
+        :size => 80, 
+        :font => "basket.ttf", 
+        :color => "#f6c" 
+        },  
+      :stroke => { 
+        :color => "white", 
+        :width => 15, 
+        :inner => 1 
+        }, 
+      :shadow => { 
+        :render => true, 
+        :top => 5, 
+        :left => 5, 
+        :opacity => 0.2 
+        }
+      }
+    
     @thick_stroked = { 
       :stroke => { 
         :color => "red", 
@@ -141,7 +211,7 @@ Try out
         :inner => 1 
       }, 
       :font => { 
-        :size => 100, 
+        :size => 50, 
         :color => "#fff" 
         }, 
       :rotate => 10, 
@@ -151,49 +221,54 @@ Try out
         :left => 5 
         }   
       }
-  
-    @bauhaus = { 
-      :font => { 
-        :size => 100, 
-        :font => "bauhausl.ttf"  
-        }  
-      }
+      
   end
   
 * In saucy.html.erb
-  <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
   <html>
     <head>
       <title>Saucy</title>
    
       <style type="text/css">
-        .saucySprite:hover {
-          background-position: 0 0 !important;
-        }
+       body {background: url(http://www.mr-tut.com/images/uploads/803.gif); }
+       p {margin-right: 3em; margin-top: 3em; float: left}
+       #container {width: 1000px}
+       .saucySprite:hover { margin-top: 0px !important; }
       </style>
+    
     </head>
     <body>
-      <%= saucy_tag "default - no style" %>
-      <%= saucy_tag "mutli\nline\nbauhaus", :style => @bauhaus  %>
-      <%= saucy_tag "stroked!!", :style => @stroked, :html => {:class=> ["myclass"]} %>
-      <%= saucy_tag "thick stroked!!", :style => @thick_stroked, :html => {:class => ["myclass2"]} %>
+      <%= saucy_tag "Saucy - Examples", :style=> @saucy, :tag=> "h2" %>
 
-      <p>Different tag</p>
+      <div id=container>
 
-      <%= saucy_tag "h2 tag", :style => @bauhaus, :tag => :h2, :html => {:id => "myid"} %>
+      <%= saucy_tag "text\non\nmultiple\nlines",:style =>  @bauhaus  %>
+      <%= saucy_tag  "letter spacing...", :style => @spacing, :html => {:class=>["myclass"]} %>
 
-      <p>Sprites</p>
+      <%= saucy_tag "stroked!!", :style => @thick_stroked, :html =>{:class=>["myclass"]} %>
+      <%= saucy_tag "30 degrees", :style => @rotate %>
+      <%= saucy_tag  "shadow", :style => @shadow %>
 
       <%= saucy_tag("I am a red/blue sprite", 
                       :style => {:font => {:color => 'red'}}, 
-                      :hover => {:font => {:color => 'blue'}}
+                      :highlight => {:font => {:color => 'blue'}}
                     ) %>
 
-      <%= saucy_tag("thick stroked sprite!!", 
-                      :style => @thick_stroked, 
-                      :hover => {:stroke => {:color => "#5fe"}},
-                      :html => {:class => ["myclass2"]}
+
+      <%= saucy_tag("hover effects sprite!!", 
+                    :style => @thick_stroked, 
+                    :highlight => {:stroke => {:color => "#5fe"}},
+                    :html => {:class => ["myclass2"]}
+                  ) %>
+
+      <%= saucy_tag(  "outline...",
+                      :style=> @outline, 
+                      :highlight => {:stroke => {:color => "blue" }} 
                     ) %>
+
+      </div>
     </body>
   </html>
+

@@ -47,9 +47,10 @@ module Saucy
                   )
                   
 
-        if options[:hover]
+        if options[:highlight]
           images  = Magick::ImageList.new
-          style   = style.deep_merge(options[:hover] || {})
+          style   = style.deep_merge(options[:highlight])
+          
           images << draw(name,  
                       style[:font], 
                       style[:background], 
@@ -121,10 +122,7 @@ module Saucy
           image = shadow!(image, shadow)
         end
 
-
-        
-        image.trim
-        
+        image.trim        
       end
       
       def shadow! input, shadow
